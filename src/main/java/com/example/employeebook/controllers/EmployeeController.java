@@ -1,14 +1,13 @@
-package com.example.employeebook;
+package com.example.employeebook.controllers;
 
 import com.example.employeebook.exceptions.BadRequestException;
 import com.example.employeebook.exceptions.EmployeeAlreadyAddedException;
 import com.example.employeebook.exceptions.EmployeeNotFoundException;
 import com.example.employeebook.exceptions.EmployeeStorageIsFullException;
+import com.example.employeebook.services.EmployeeService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 public class EmployeeController {
