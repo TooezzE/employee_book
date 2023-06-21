@@ -21,7 +21,7 @@ public class EmployeeService {
     List<Employee> employees = new ArrayList<>();
     private int allowedEmployeesCount = 10;
 
-    public Employee addEmployee(String firstName, String lastName, int salary, int departamentId){
+    public void addEmployee(String firstName, String lastName, int salary, int departamentId){
         checkEmployeeData(firstName, lastName);
         if(employees.size() >= allowedEmployeesCount){
             throw new EmployeeStorageIsFullException("Нельзя добавить сотрудника. Коллекция переполнена");
@@ -33,7 +33,13 @@ public class EmployeeService {
         }
         Employee employee = new Employee(StringUtils.capitalize(firstName), StringUtils.capitalize(lastName), salary, departamentId);
         employees.add(employee);
-        return employee;
+    }
+
+    public void addEmployee(Employee employee){
+        if(employees.size() >= allowedEmployeesCount){
+            throw new EmployeeStorageIsFullException("Нельзя добавить сотрудника. Коллекция переполнена");
+        }
+        employees.add(employee);
     }
 
     public Employee removeEmployee(String firstName, String lastName) {

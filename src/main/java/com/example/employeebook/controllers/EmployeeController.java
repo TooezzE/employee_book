@@ -23,7 +23,8 @@ public class EmployeeController {
                               @RequestParam("salary") int salary,
                               @RequestParam("departamentId") int departamentId) {
         try {
-            return "Added " + employeeService.addEmployee(firstName, lastName, salary, departamentId).toString();
+            employeeService.addEmployee(firstName, lastName, salary, departamentId);
+            return "Employee " + firstName + lastName + " added.";
         } catch (EmployeeStorageIsFullException e) {
             return "Невозможно добавить сотрудника. Список переполнен.";
         } catch (EmployeeAlreadyAddedException e) {

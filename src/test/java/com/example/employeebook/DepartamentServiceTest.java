@@ -4,12 +4,15 @@ import com.example.employeebook.services.DepartamentsService;
 import com.example.employeebook.services.EmployeeService;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DepartamentServiceTest {
 
+    @Mock
     private EmployeeService employeeService;
     private DepartamentsService departamentsService;
 
