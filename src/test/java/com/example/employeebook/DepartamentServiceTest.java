@@ -1,9 +1,11 @@
 package com.example.employeebook;
 
+import com.example.employeebook.dto.Employee;
 import com.example.employeebook.services.DepartamentsService;
 import com.example.employeebook.services.EmployeeService;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import java.util.ArrayList;
@@ -12,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DepartamentServiceTest {
 
-    @Mock
+    @InjectMocks
     private EmployeeService employeeService;
     private DepartamentsService departamentsService;
 
