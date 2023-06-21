@@ -16,7 +16,6 @@ public class DepartamentsController {
     }
 
     @RequestMapping(value = "/{id}/employees", method = RequestMethod.GET)
-    @ResponseBody
     public String employeesInDep(@PathVariable String id){
         try{
             return departamentsService.getEmployeesInDep(Integer.parseInt(id)).toString();
