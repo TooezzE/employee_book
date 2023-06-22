@@ -1,7 +1,7 @@
 package com.example.employeebook.services;
 
 
-import com.example.employeebook.Employee;
+import com.example.employeebook.dto.Employee;
 import com.example.employeebook.exceptions.BadRequestException;
 import com.example.employeebook.exceptions.EmployeeAlreadyAddedException;
 import com.example.employeebook.exceptions.EmployeeNotFoundException;
@@ -19,15 +19,17 @@ import java.util.stream.Collectors;
 @Scope("singleton")
 public class EmployeeService {
     List<Employee> employees = new ArrayList<>();
+    List<Employee> firedEmployees = new ArrayList<>();
     private int allowedEmployeesCount = 10;
+
 
     public void addEmployee(String firstName, String lastName, int salary, int departamentId){
         checkEmployeeData(firstName, lastName);
         if(employees.size() >= allowedEmployeesCount){
             throw new EmployeeStorageIsFullException("Нельзя добавить сотрудника. Коллекция переполнена");
         }
-        for (int i = 0; i < employees.size(); i++) {
-            if (employees.get(i).getFirstName().equals(firstName) && employees.get(i).getLastName().equals(lastName)) {
+        for (Employee value : employees) {
+            if (value.getFirstName().equals(firstName) && value.getLastName().equals(lastName)) {
                 throw new EmployeeAlreadyAddedException("Сотрудник с таким именем уже есть в коллекции");
             }
         }
@@ -44,9 +46,9 @@ public class EmployeeService {
 
     public Employee removeEmployee(String firstName, String lastName) {
         Employee employee = null;
-        for (int i = 0; i < employees.size(); i++) {
-            if (employees.get(i).getFirstName().equals(firstName) && employees.get(i).getLastName().equals(lastName)) {
-                employee = employees.get(i);
+        for (Employee value : employees) {
+            if (value.getFirstName().equals(firstName) && value.getLastName().equals(lastName)) {
+                employee = value;
             }
         }
         if (employee == null){
@@ -60,9 +62,9 @@ public class EmployeeService {
 
     public Employee findEmployee(String firstName, String lastName){
         Employee employee = null;
-        for (int i = 0; i < employees.size(); i++) {
-            if (employees.get(i).getFirstName().equals(firstName) && employees.get(i).getLastName().equals(lastName)) {
-                employee = employees.get(i);
+        for (Employee value : employees) {
+            if (value.getFirstName().equals(firstName) && value.getLastName().equals(lastName)) {
+                employee = value;
             }
         }
         if (employee == null){
@@ -73,15 +75,15 @@ public class EmployeeService {
 
         public Employee salaryMinInDepartament(int departament) {
         return employees.stream()
-                .filter(e -> e.getDepartamentId() == departament)
-                .min(Comparator.comparing(e -> e.getSalary()))
+                .filter(e -> e.getDepartmentId() == departament)
+                .min(Comparator.comparing(Employee::getSalary))
                 .get();
     }
 
     public Employee salaryMaxInDepartament(int departament) {
         return employees.stream()
-                .filter(e -> e.getDepartamentId() == departament)
-                .max(Comparator.comparing(e -> e.getSalary()))
+                .filter(e -> e.getDepartmentId() == departament)
+                .max(Comparator.comparing(Employee::getSalary))
                 .get();
     }
         public String printEmployees() {
@@ -90,7 +92,7 @@ public class EmployeeService {
 
     public List<Employee> printEmployeesOfDep(int departamentId){
         return employees.stream()
-                .filter(e -> e.getDepartamentId() == departamentId)
+                .filter(e -> e.getDepartmentId() == departamentId)
                 .collect(Collectors.toList());
     }
 
@@ -105,6 +107,12 @@ public class EmployeeService {
     }
 
     public void changeEmployeesCountAllowed(int newCountAllowed){
+        if(employees.size() > newCountAllowed){
+            for(int i = employees.size(); i > newCountAllowed; i--){
+                firedEmployees.add(employees.get(i));
+                employees.remove(i);
+            }
+        }
         allowedEmployeesCount = newCountAllowed;
     }
 

@@ -1,16 +1,12 @@
 package com.example.employeebook;
 
+import com.example.employeebook.dto.Employee;
 import com.example.employeebook.exceptions.EmployeeAlreadyAddedException;
 import com.example.employeebook.exceptions.EmployeeNotFoundException;
 import com.example.employeebook.exceptions.EmployeeStorageIsFullException;
 import com.example.employeebook.services.EmployeeService;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,7 +1,7 @@
 package com.example.employeebook.services;
 
-import com.example.employeebook.Employee;
-import com.example.employeebook.exceptions.DepartamentNotFoundException;
+import com.example.employeebook.dto.Employee;
+import com.example.employeebook.exceptions.DepartmentNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -10,22 +10,22 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class DepartamentsService {
+public class DepartmentsService {
 
-    private EmployeeService employeeService;
-    private int departamentsCount = 5;
+    private final EmployeeService employeeService;
+    private static int departmentsCount = 5;
 
-    public DepartamentsService(EmployeeService employeeService) {
+    public DepartmentsService(EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
 
     public List<Employee> getEmployeesInDep(int dep){
-        if(dep == 0 || dep > departamentsCount){
-            throw new DepartamentNotFoundException("Wrong departament number");
+        if(dep == 0 || dep > departmentsCount){
+            throw new DepartmentNotFoundException("Wrong department number");
         }
         List<Employee> employeesOfOneDep = new ArrayList<>();
         for (Employee employee : employeeService.employees) {
-            if(employee.getDepartamentId() == dep){
+            if(employee.getDepartmentId() == dep){
                 employeesOfOneDep.add(employee);
             }
         }
@@ -33,12 +33,12 @@ public class DepartamentsService {
     }
 
     public int getSalarySumInDep(int dep){
-        if(dep == 0 || dep > departamentsCount){
-            throw new DepartamentNotFoundException("Wrong departament number");
+        if(dep == 0 || dep > departmentsCount){
+            throw new DepartmentNotFoundException("Wrong department number");
         }
         int sum = 0;
         for (Employee employee : employeeService.employees) {
-            if(employee.getDepartamentId() == dep) {
+            if(employee.getDepartmentId() == dep) {
                 sum = sum + employee.getSalary();
             }
         }
@@ -46,12 +46,12 @@ public class DepartamentsService {
     }
 
     public int getMinSalaryInDep(int dep){
-        if(dep == 0 || dep > departamentsCount){
-            throw new DepartamentNotFoundException("Wrong departament number");
+        if(dep == 0 || dep > departmentsCount){
+            throw new DepartmentNotFoundException("Wrong department number");
         }
         int min = Integer.MAX_VALUE;
         for (Employee employee : employeeService.employees) {
-            if (employee.getDepartamentId() == dep){
+            if (employee.getDepartmentId() == dep){
                 if(employee.getSalary() < min){
                     min = employee.getSalary();
                 }
@@ -61,12 +61,12 @@ public class DepartamentsService {
     }
 
     public int getMaxSalaryInDep(int dep){
-        if(dep == 0 || dep > departamentsCount){
-            throw new DepartamentNotFoundException("Wrong departament number");
+        if(dep == 0 || dep > departmentsCount){
+            throw new DepartmentNotFoundException("Wrong department number");
         }
-        int max = Integer.MIN_VALUE;
+        int max = 0;
         for (Employee employee : employeeService.employees) {
-            if (employee.getDepartamentId() == dep){
+            if (employee.getDepartmentId() == dep){
                 if(employee.getSalary() > max){
                     max = employee.getSalary();
                 }
@@ -79,9 +79,9 @@ public class DepartamentsService {
         Map<Integer, List<Employee>> employeesByDeps = new HashMap<>();
         List<Employee> employeesOfOneDep = new ArrayList<>();
         int currentDep = 1;
-        while (currentDep <= departamentsCount) {
+        while (currentDep <= departmentsCount) {
             for (Employee employee : employeeService.employees) {
-                if (employee.getDepartamentId() == currentDep){
+                if (employee.getDepartmentId() == currentDep){
                     employeesOfOneDep.add(employee);
                 }
             }
@@ -91,7 +91,11 @@ public class DepartamentsService {
         return employeesByDeps;
     }
 
-    private void addNewDepartament(){
-        departamentsCount++;
+    public static int getDepartmentsCount() {
+        return departmentsCount;
+    }
+
+    private void createNewDepartment(){
+        departmentsCount++;
     }
 }

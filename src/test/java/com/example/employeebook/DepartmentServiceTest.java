@@ -1,7 +1,7 @@
 package com.example.employeebook;
 
 import com.example.employeebook.dto.Employee;
-import com.example.employeebook.services.DepartamentsService;
+import com.example.employeebook.services.DepartmentsService;
 import com.example.employeebook.services.EmployeeService;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,16 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class DepartamentServiceTest {
+public class DepartmentServiceTest {
 
-    @InjectMocks
+    @Mock
     private EmployeeService employeeService;
-    private DepartamentsService departamentsService;
+    @InjectMocks
+    private DepartmentsService departmentsService;
 
     @Before
     public void setUp(){
         employeeService = new EmployeeService();
-        departamentsService = new DepartamentsService(employeeService);
+        departmentsService = new DepartmentsService(employeeService);
     }
 
     @Test
@@ -34,7 +35,7 @@ public class DepartamentServiceTest {
         employeeService.addEmployee("Egor", "Irt", 1000, 1);
         employeeService.addEmployee("Vlad", "Ten", 1000, 1);
         employeeService.addEmployee("Grisha", "Ops", 1000, 2);
-        assertEquals(expected, departamentsService.getEmployeesInDep(1));
+        assertEquals(expected, departmentsService.getEmployeesInDep(1));
     }
 
     @Test
@@ -42,7 +43,7 @@ public class DepartamentServiceTest {
         int expected = 2000;
         employeeService.addEmployee("Egor", "Irt", 1000, 1);
         employeeService.addEmployee("Vlad", "Ten", 1000, 1);
-        assertEquals(expected, departamentsService.getSalarySumInDep(1));
+        assertEquals(expected, departmentsService.getSalarySumInDep(1));
     }
 
     @Test
@@ -51,7 +52,7 @@ public class DepartamentServiceTest {
         employeeService.addEmployee("Vlad", "Ten", 10, 1);
         employeeService.addEmployee("Grisha", "Ops", 96, 1);
         int expected = 10;
-        assertEquals(expected, departamentsService.getMinSalaryInDep(1));
+        assertEquals(expected, departmentsService.getMinSalaryInDep(1));
     }
 
     @Test
@@ -60,6 +61,6 @@ public class DepartamentServiceTest {
         employeeService.addEmployee("Vlad", "Ten", 10, 1);
         employeeService.addEmployee("Grisha", "Ops", 96, 1);
         int expected = 1000;
-        assertEquals(expected, departamentsService.getMaxSalaryInDep(1));
+        assertEquals(expected, departmentsService.getMaxSalaryInDep(1));
     }
 }
