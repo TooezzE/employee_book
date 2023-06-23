@@ -21,7 +21,7 @@ public class Employee {
             this.salary = salary;
         }
 
-        if(departmentId <= 0 || departmentId > DepartmentsService.getDepartmentsCount()){
+        if(departmentId <= 0 || departmentId > DepartmentsService.getCurrentDepartmentsCount()){
             throw new DepartmentNotFoundException("Department with this number does not exist");
         } else {
             this.departmentId = departmentId;

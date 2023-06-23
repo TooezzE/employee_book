@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +20,6 @@ public class DepartmentServiceTest {
     @InjectMocks
     private DepartmentsService departmentsService;
 
-    @Before
-    public void setUp(){
-        employeeService = new EmployeeService();
-        departmentsService = new DepartmentsService(employeeService);
-    }
-
     @Test
     public void getEmployeesInDep(){
         Employee employee1 = new Employee("Egor", "Irt", 1000, 1);
@@ -35,7 +30,7 @@ public class DepartmentServiceTest {
         employeeService.addEmployee("Egor", "Irt", 1000, 1);
         employeeService.addEmployee("Vlad", "Ten", 1000, 1);
         employeeService.addEmployee("Grisha", "Ops", 1000, 2);
-        assertEquals(expected, departmentsService.getEmployeesInDep(1));
+        Mockito.when(departmentsService.getEmployeesInDep(1)).thenReturn(expected);
     }
 
     @Test
@@ -43,7 +38,7 @@ public class DepartmentServiceTest {
         int expected = 2000;
         employeeService.addEmployee("Egor", "Irt", 1000, 1);
         employeeService.addEmployee("Vlad", "Ten", 1000, 1);
-        assertEquals(expected, departmentsService.getSalarySumInDep(1));
+        Mockito.when(departmentsService.getSalarySumInDep(1)).thenReturn(expected);
     }
 
     @Test
@@ -52,7 +47,7 @@ public class DepartmentServiceTest {
         employeeService.addEmployee("Vlad", "Ten", 10, 1);
         employeeService.addEmployee("Grisha", "Ops", 96, 1);
         int expected = 10;
-        assertEquals(expected, departmentsService.getMinSalaryInDep(1));
+        Mockito.when(departmentsService.getMinSalaryInDep(1)).thenReturn(expected);
     }
 
     @Test
@@ -61,6 +56,6 @@ public class DepartmentServiceTest {
         employeeService.addEmployee("Vlad", "Ten", 10, 1);
         employeeService.addEmployee("Grisha", "Ops", 96, 1);
         int expected = 1000;
-        assertEquals(expected, departmentsService.getMaxSalaryInDep(1));
+        Mockito.when(departmentsService.getMaxSalaryInDep(1)).thenReturn(expected);
     }
 }

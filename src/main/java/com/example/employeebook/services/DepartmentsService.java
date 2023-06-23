@@ -13,14 +13,14 @@ import java.util.Map;
 public class DepartmentsService {
 
     private final EmployeeService employeeService;
-    private static int departmentsCount = 5;
+    private static int currentDepartmentsCount = 5;
 
     public DepartmentsService(EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
 
     public List<Employee> getEmployeesInDep(int dep){
-        if(dep == 0 || dep > departmentsCount){
+        if(dep == 0 || dep > currentDepartmentsCount){
             throw new DepartmentNotFoundException("Wrong department number");
         }
         List<Employee> employeesOfOneDep = new ArrayList<>();
@@ -33,7 +33,7 @@ public class DepartmentsService {
     }
 
     public int getSalarySumInDep(int dep){
-        if(dep == 0 || dep > departmentsCount){
+        if(dep == 0 || dep > currentDepartmentsCount){
             throw new DepartmentNotFoundException("Wrong department number");
         }
         int sum = 0;
@@ -45,8 +45,16 @@ public class DepartmentsService {
         return sum;
     }
 
+    public int getSalarySumOfAllEmployees(){
+        int sum = 0;
+        for (Employee employee : employeeService.employees) {
+            sum = sum + employee.getSalary();
+        }
+        return sum;
+    }
+
     public int getMinSalaryInDep(int dep){
-        if(dep == 0 || dep > departmentsCount){
+        if(dep == 0 || dep > currentDepartmentsCount){
             throw new DepartmentNotFoundException("Wrong department number");
         }
         int min = Integer.MAX_VALUE;
@@ -61,7 +69,7 @@ public class DepartmentsService {
     }
 
     public int getMaxSalaryInDep(int dep){
-        if(dep == 0 || dep > departmentsCount){
+        if(dep == 0 || dep > currentDepartmentsCount){
             throw new DepartmentNotFoundException("Wrong department number");
         }
         int max = 0;
@@ -79,7 +87,7 @@ public class DepartmentsService {
         Map<Integer, List<Employee>> employeesByDeps = new HashMap<>();
         List<Employee> employeesOfOneDep = new ArrayList<>();
         int currentDep = 1;
-        while (currentDep <= departmentsCount) {
+        while (currentDep <= currentDepartmentsCount) {
             for (Employee employee : employeeService.employees) {
                 if (employee.getDepartmentId() == currentDep){
                     employeesOfOneDep.add(employee);
@@ -91,11 +99,11 @@ public class DepartmentsService {
         return employeesByDeps;
     }
 
-    public static int getDepartmentsCount() {
-        return departmentsCount;
+    public static int getCurrentDepartmentsCount() {
+        return currentDepartmentsCount;
     }
 
     private void createNewDepartment(){
-        departmentsCount++;
+        currentDepartmentsCount++;
     }
 }
