@@ -56,7 +56,7 @@ public class EmployeeController {
 
     @GetMapping(path = "/employee/all")
     public String printEmployees(){
-        return  employeeService.printEmployees();
+        return  employeeService.getAll().toString();
     }
 
     @GetMapping(path = "/employee/departaments/max-salary")

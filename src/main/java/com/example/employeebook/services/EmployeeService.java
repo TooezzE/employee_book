@@ -86,10 +86,11 @@ public class EmployeeService {
                 .max(Comparator.comparing(Employee::getSalary))
                 .get();
     }
-        public String printEmployees() {
-        return employees.toString();
+        public List<Employee> getAll() {
+        return employees;
     }
 
+    
     public List<Employee> printEmployeesOfDep(int departamentId){
         return employees.stream()
                 .filter(e -> e.getDepartmentId() == departamentId)

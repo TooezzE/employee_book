@@ -24,7 +24,7 @@ public class DepartmentsService {
             throw new DepartmentNotFoundException("Wrong department number");
         }
         List<Employee> employeesOfOneDep = new ArrayList<>();
-        for (Employee employee : employeeService.employees) {
+        for (Employee employee : employeeService.getAll()) {
             if(employee.getDepartmentId() == dep){
                 employeesOfOneDep.add(employee);
             }
@@ -37,7 +37,7 @@ public class DepartmentsService {
             throw new DepartmentNotFoundException("Wrong department number");
         }
         int sum = 0;
-        for (Employee employee : employeeService.employees) {
+        for (Employee employee : employeeService.getAll()) {
             if(employee.getDepartmentId() == dep) {
                 sum = sum + employee.getSalary();
             }
@@ -47,7 +47,7 @@ public class DepartmentsService {
 
     public int getSalarySumOfAllEmployees(){
         int sum = 0;
-        for (Employee employee : employeeService.employees) {
+        for (Employee employee : employeeService.getAll()) {
             sum = sum + employee.getSalary();
         }
         return sum;
@@ -58,7 +58,7 @@ public class DepartmentsService {
             throw new DepartmentNotFoundException("Wrong department number");
         }
         int min = Integer.MAX_VALUE;
-        for (Employee employee : employeeService.employees) {
+        for (Employee employee : employeeService.getAll()) {
             if (employee.getDepartmentId() == dep){
                 if(employee.getSalary() < min){
                     min = employee.getSalary();
@@ -73,7 +73,7 @@ public class DepartmentsService {
             throw new DepartmentNotFoundException("Wrong department number");
         }
         int max = 0;
-        for (Employee employee : employeeService.employees) {
+        for (Employee employee : employeeService.getAll()) {
             if (employee.getDepartmentId() == dep){
                 if(employee.getSalary() > max){
                     max = employee.getSalary();
@@ -88,7 +88,7 @@ public class DepartmentsService {
         List<Employee> employeesOfOneDep = new ArrayList<>();
         int currentDep = 1;
         while (currentDep <= currentDepartmentsCount) {
-            for (Employee employee : employeeService.employees) {
+            for (Employee employee : employeeService.getAll()) {
                 if (employee.getDepartmentId() == currentDep){
                     employeesOfOneDep.add(employee);
                 }
