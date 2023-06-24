@@ -1,4 +1,4 @@
-package com.example.employeebook;
+package com.example.employeebook.services;
 
 import com.example.employeebook.dto.Employee;
 import com.example.employeebook.exceptions.EmployeeAlreadyAddedException;

@@ -1,9 +1,8 @@
-package com.example.employeebook;
+package com.example.employeebook.services;
 
 import com.example.employeebook.dto.Employee;
 import com.example.employeebook.services.DepartmentsService;
 import com.example.employeebook.services.EmployeeService;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,27 +11,25 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 public class DepartmentServiceTest {
-
     @Mock
-    private EmployeeService employeeService;
+    private EmployeeService employeeServiceMock;
     @InjectMocks
     private DepartmentsService departmentsService;
     List<Employee> employees = Arrays.asList(
-          new Employee("Egor", "Irt", 500, 1),
+            new Employee("Egor", "Irt", 500, 1),
             new Employee("Vlad", "Ten", 1500, 1),
-        new Employee("Grisha", "Ops", 1000, 2)
+            new Employee("Grisha", "Ops", 1000, 2)
     );
 
     @BeforeEach
-    public void getAll(){
-        Mockito.when(employeeService.getAll()).thenReturn(employees);
+    public void setup(){
+        Mockito.when(employeeServiceMock.getAll()).thenReturn(employees);
     }
 
     @Test
