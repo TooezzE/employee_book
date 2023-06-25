@@ -4,9 +4,8 @@ import com.example.employeebook.dto.Employee;
 import com.example.employeebook.exceptions.EmployeeAlreadyAddedException;
 import com.example.employeebook.exceptions.EmployeeNotFoundException;
 import com.example.employeebook.exceptions.EmployeeStorageIsFullException;
-import com.example.employeebook.services.EmployeeService;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,7 +13,7 @@ public class EmployeeServiceTest {
 
     private EmployeeService employeeService;
 
-    @Before
+    @BeforeEach
     public void setUp(){
         employeeService = new EmployeeService();
     }

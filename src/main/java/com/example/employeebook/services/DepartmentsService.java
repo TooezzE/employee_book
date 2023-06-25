@@ -4,10 +4,8 @@ import com.example.employeebook.dto.Employee;
 import com.example.employeebook.exceptions.DepartmentNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class DepartmentsService {
@@ -23,13 +21,9 @@ public class DepartmentsService {
         if(dep == 0 || dep > currentDepartmentsCount){
             throw new DepartmentNotFoundException("Wrong department number");
         }
-        List<Employee> employeesOfOneDep = new ArrayList<>();
-        for (Employee employee : employeeService.getAll()) {
-            if(employee.getDepartmentId() == dep){
-                employeesOfOneDep.add(employee);
-            }
-        }
-        return employeesOfOneDep;
+        return employeeService.getAll().stream()
+                .filter(e -> e.getDepartmentId() == dep)
+                .collect(Collectors.toList());
     }
 
     public int getSalarySumInDep(int dep){
@@ -57,15 +51,11 @@ public class DepartmentsService {
         if(dep == 0 || dep > currentDepartmentsCount){
             throw new DepartmentNotFoundException("Wrong department number");
         }
-        int min = Integer.MAX_VALUE;
-        for (Employee employee : employeeService.getAll()) {
-            if (employee.getDepartmentId() == dep){
-                if(employee.getSalary() < min){
-                    min = employee.getSalary();
-                }
-            }
-        }
-        return min;
+        Employee employee = employeeService.getAll().stream()
+                .filter(e -> e.getDepartmentId() == dep)
+                .min(Comparator.comparing(Employee::getSalary))
+                .get();
+        return employee.getSalary();
     }
 
     public int getMaxSalaryInDep(int dep){
@@ -84,19 +74,8 @@ public class DepartmentsService {
     }
 
     public Map<Integer, List<Employee>> getEmployeesGroupedByDeps(){
-        Map<Integer, List<Employee>> employeesByDeps = new HashMap<>();
-        List<Employee> employeesOfOneDep = new ArrayList<>();
-        int currentDep = 1;
-        while (currentDep <= currentDepartmentsCount) {
-            for (Employee employee : employeeService.getAll()) {
-                if (employee.getDepartmentId() == currentDep){
-                    employeesOfOneDep.add(employee);
-                }
-            }
-            employeesByDeps.put(currentDep, employeesOfOneDep);
-            currentDep++;
-        }
-        return employeesByDeps;
+        return employeeService.getAll().stream()
+                .collect(Collectors.groupingBy(Employee::getDepartmentId));
     }
 
     public static int getCurrentDepartmentsCount() {
