@@ -1,4 +1,7 @@
-package com.example.employeebook;
+package com.example.employeebook.dto;
+
+import com.example.employeebook.exceptions.DepartmentNotFoundException;
+import com.example.employeebook.services.DepartmentsService;
 
 import java.util.Objects;
 
@@ -6,13 +9,23 @@ public class Employee {
     private String firstName;
     private String lastName;
     private int salary;
-    private int departamentId;
+    private int departmentId;
 
-    public Employee(String firstName, String lastName, int salary, int departamentId) {
+    public Employee(String firstName, String lastName, int salary, int departmentId) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.salary = salary;
-        this.departamentId = departamentId;
+
+        if(salary < 0){
+            throw new IllegalArgumentException("Salary could not be less than 0");
+        } else {
+            this.salary = salary;
+        }
+
+        if(departmentId <= 0 || departmentId > DepartmentsService.getCurrentDepartmentsCount()){
+            throw new DepartmentNotFoundException("Department with this number does not exist");
+        } else {
+            this.departmentId = departmentId;
+        }
     }
 
     public String getFirstName() {
@@ -39,12 +52,12 @@ public class Employee {
         this.salary = salary;
     }
 
-    public int getDepartamentId() {
-        return departamentId;
+    public int getDepartmentId() {
+        return departmentId;
     }
 
-    public void setDepartamentId(int departamentId) {
-        this.departamentId = departamentId;
+    public void setDepartmentId(int departmentId) {
+        this.departmentId = departmentId;
     }
 
     public String getFullName(){
@@ -68,7 +81,7 @@ public class Employee {
 
     @Override
     public String toString() {
-        return " Сотрудник {" +
+        return "{" +
                 "Имя = '" + firstName + '\'' +
                 ", Фамилия = '" + lastName + '\'' +
                 "} ";

@@ -1,18 +1,17 @@
-package com.example.employeebook;
+package com.example.employeebook.controllers;
 
 import com.example.employeebook.exceptions.BadRequestException;
 import com.example.employeebook.exceptions.EmployeeAlreadyAddedException;
 import com.example.employeebook.exceptions.EmployeeNotFoundException;
 import com.example.employeebook.exceptions.EmployeeStorageIsFullException;
+import com.example.employeebook.services.EmployeeService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 public class EmployeeController {
-    private EmployeeService employeeService;
+    private final EmployeeService employeeService;
 
     public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
@@ -24,7 +23,8 @@ public class EmployeeController {
                               @RequestParam("salary") int salary,
                               @RequestParam("departamentId") int departamentId) {
         try {
-            return "Added " + employeeService.addEmployee(firstName, lastName, salary, departamentId).toString();
+            employeeService.addEmployee(firstName, lastName, salary, departamentId);
+            return "Employee " + firstName + lastName + " added.";
         } catch (EmployeeStorageIsFullException e) {
             return "Невозможно добавить сотрудника. Список переполнен.";
         } catch (EmployeeAlreadyAddedException e) {
@@ -56,7 +56,7 @@ public class EmployeeController {
 
     @GetMapping(path = "/employee/all")
     public String printEmployees(){
-        return  employeeService.printEmployees();
+        return  employeeService.getAll().toString();
     }
 
     @GetMapping(path = "/employee/departaments/max-salary")

@@ -1,47 +1,54 @@
-package com.example.employeebook;
+package com.example.employeebook.services;
 
 
+import com.example.employeebook.dto.Employee;
 import com.example.employeebook.exceptions.BadRequestException;
 import com.example.employeebook.exceptions.EmployeeAlreadyAddedException;
 import com.example.employeebook.exceptions.EmployeeNotFoundException;
 import com.example.employeebook.exceptions.EmployeeStorageIsFullException;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class EmployeeServiceImpl implements EmployeeService {
+@Scope("singleton")
+public class EmployeeService {
     List<Employee> employees = new ArrayList<>();
+    List<Employee> firedEmployees = new ArrayList<>();
+    private int allowedEmployeesCount = 10;
 
-    @Override
-    public Employee addEmployee(String firstName, String lastName, int salary, int departamentId){
+
+    public void addEmployee(String firstName, String lastName, int salary, int departamentId){
         checkEmployeeData(firstName, lastName);
-        if(employees.size() >= 10){
+        if(employees.size() >= allowedEmployeesCount){
             throw new EmployeeStorageIsFullException("Нельзя добавить сотрудника. Коллекция переполнена");
         }
-        for (int i = 0; i < employees.size(); i++) {
-            if (employees.get(i).getFirstName().equals(firstName) && employees.get(i).getLastName().equals(lastName)) {
+        for (Employee value : employees) {
+            if (value.getFirstName().equals(firstName) && value.getLastName().equals(lastName)) {
                 throw new EmployeeAlreadyAddedException("Сотрудник с таким именем уже есть в коллекции");
             }
         }
-        StringUtils.capitalize(firstName);
-        StringUtils.capitalize(lastName);
-        Employee employee = new Employee(firstName, lastName, salary, departamentId);
+        Employee employee = new Employee(StringUtils.capitalize(firstName), StringUtils.capitalize(lastName), salary, departamentId);
         employees.add(employee);
-        return employee;
     }
 
-    @Override
+    public void addEmployee(Employee employee){
+        if(employees.size() >= allowedEmployeesCount){
+            throw new EmployeeStorageIsFullException("Нельзя добавить сотрудника. Коллекция переполнена");
+        }
+        employees.add(employee);
+    }
+
     public Employee removeEmployee(String firstName, String lastName) {
         Employee employee = null;
-        for (int i = 0; i < employees.size(); i++) {
-            if (employees.get(i).getFirstName().equals(firstName) && employees.get(i).getLastName().equals(lastName)) {
-                employee = employees.get(i);
+        for (Employee value : employees) {
+            if (value.getFirstName().equals(firstName) && value.getLastName().equals(lastName)) {
+                employee = value;
             }
         }
         if (employee == null){
@@ -53,12 +60,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
 
-    @Override
     public Employee findEmployee(String firstName, String lastName){
         Employee employee = null;
-        for (int i = 0; i < employees.size(); i++) {
-            if (employees.get(i).getFirstName().equals(firstName) && employees.get(i).getLastName().equals(lastName)) {
-                employee = employees.get(i);
+        for (Employee value : employees) {
+            if (value.getFirstName().equals(firstName) && value.getLastName().equals(lastName)) {
+                employee = value;
             }
         }
         if (employee == null){
@@ -67,32 +73,30 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employee;
     }
 
-    @Override
-    public Employee salaryMinInDepartament(int departament) {
+        public Employee salaryMinInDepartament(int departament) {
         return employees.stream()
-                .filter(e -> e.getDepartamentId() == departament)
-                .min(Comparator.comparing(e -> e.getSalary()))
+                .filter(e -> e.getDepartmentId() == departament)
+                .min(Comparator.comparing(Employee::getSalary))
                 .get();
     }
 
-    @Override
     public Employee salaryMaxInDepartament(int departament) {
         return employees.stream()
-                .filter(e -> e.getDepartamentId() == departament)
-                .max(Comparator.comparing(e -> e.getSalary()))
+                .filter(e -> e.getDepartmentId() == departament)
+                .max(Comparator.comparing(Employee::getSalary))
                 .get();
     }
-    @Override
-    public String printEmployees() {
-        return employees.toString();
+        public List<Employee> getAll() {
+        return this.employees;
     }
 
-    @Override
+    
     public List<Employee> printEmployeesOfDep(int departamentId){
         return employees.stream()
-                .filter(e -> e.getDepartamentId() == departamentId)
+                .filter(e -> e.getDepartmentId() == departamentId)
                 .collect(Collectors.toList());
     }
+
 
     public void checkEmployeeData(String firstName, String lastName){
         if(StringUtils.containsAny(firstName, " ", ",", " <([0-9{\\^-=$!|]})?*+.>")
@@ -101,6 +105,16 @@ public class EmployeeServiceImpl implements EmployeeService {
         } else if(StringUtils.isEmpty(firstName) || StringUtils.isEmpty(lastName)) {
             throw new BadRequestException();
         }
+    }
+
+    public void changeEmployeesCountAllowed(int newCountAllowed){
+        if(employees.size() > newCountAllowed){
+            for(int i = employees.size(); i > newCountAllowed; i--){
+                firedEmployees.add(employees.get(i));
+                employees.remove(i);
+            }
+        }
+        allowedEmployeesCount = newCountAllowed;
     }
 
 
